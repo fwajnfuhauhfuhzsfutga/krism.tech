@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>krism.tech — Profile: krism</title>
+  <meta name="description" content="krism.tech" />
+  <meta name="theme-color" content="#161616" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #161616;
+      --panel: #202020;
+      --panel-head: #272727;
+      --input-bg: #181818;
+      --border: #2e2e2e;
+      --border-light: #383838;
+      --text: #D4D4D3;
+      --muted: #8a8a8a;
+      --link: #4791db;
+      --link-hover: #6cb0f5;
+      --gs: #95B806;
+      --idle: #dca11d;
+      --dnd: #d14343;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-size: 11px;
+      line-height: 15.4px;
+      letter-spacing: 0px;
+      min-height: 100vh;
+      padding: 16px 16px 32px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    /* Радужная полоска по верхнему краю экрана */
+    .top-rainbow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        #2bc0e4 0%,
+        #4a69bd 22%,
+        #8e44ad 45%,
+        #e84393 66%,
+        #f39c12 84%,
+        #95B806 100%
+      );
+      z-index: 1000;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--link-hover);
+      text-decoration: underline;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1160px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+    }
+
+    /* Шапка */
+    .header-top {
+      padding: 12px 14px 10px;
+    }
+
+    .logo {
+      font-family: 'Raleway', sans-serif;
+      font-size: 19px;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: 0px;
+      color: #D4D4D3;
+      display: inline-block;
+      border-bottom: 1px solid var(--gs);
+      padding-bottom: 1px;
+      margin-bottom: 11px;
+      user-select: none;
+    }
+
+    .logo span {
+      color: var(--gs);
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .nav-list a,
+    .nav-list button {
+      background: none;
+      border: none;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-size: 11px;
+      line-height: 15.4px;
+      letter-spacing: 0px;
+      color: var(--text);
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .nav-list a:hover,
+    .nav-list button:hover {
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .nav-list a.active {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .header-sub {
+      border-top: 1px solid var(--border);
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .user-welcome strong {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .user-welcome .uid-muted {
+      color: var(--muted);
+    }
+
+    /* Заголовок блока */
+    .panel-head {
+      background: var(--panel-head);
+      border-bottom: 1px solid var(--border);
+      border-radius: 2px 2px 0 0;
+      padding: 7px 14px;
+      font-size: 11px;
+      line-height: 15.4px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* Карточка профиля */
+    .profile-body {
+      padding: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .profile-left {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .info-table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 660px;
+    }
+
+    .info-table td {
+      padding: 2px 0;
+      vertical-align: middle;
+      font-size: 11px;
+      line-height: 15.4px;
+      letter-spacing: 0px;
+    }
+
+    .info-table td.lbl {
+      width: 120px;
+      color: var(--muted);
+      user-select: none;
+    }
+
+    .info-table td.val {
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    /* Компактная строка текущей игры в Discord */
+    .playing-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .playing-icon {
+      width: 14px;
+      height: 14px;
+      object-fit: cover;
+      border: 1px solid #353535;
+      flex-shrink: 0;
+      display: none;
+    }
+
+    .playing-active {
+      color: var(--text);
+    }
+
+    .playing-muted {
+      color: var(--muted);
+    }
+
+    .playing-timer {
+      color: var(--gs);
+    }
+
+    .copy-trigger {
+      background: none;
+      border: none;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-size: 11px;
+      line-height: 15.4px;
+      color: var(--link);
+      cursor: pointer;
+      margin-left: 6px;
+      padding: 0;
+    }
+
+    .copy-trigger:hover {
+      color: var(--link-hover);
+      text-decoration: underline;
+    }
+
+    .st-online { color: var(--gs); }
+    .st-idle { color: var(--idle); }
+    .st-dnd { color: var(--dnd); }
+    .st-offline { color: var(--muted); }
+
+    .posts-link {
+      margin-top: 10px;
+    }
+
+    /* Правый квадратный аватар */
+    .profile-avatar {
+      width: 132px;
+      height: 132px;
+      background: #181818;
+      border: 1px solid var(--border-light);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .avatar-fallback {
+      font-family: 'Raleway', sans-serif;
+      font-size: 26px;
+      font-weight: 500;
+      color: var(--gs);
+    }
+
+    /* Блок комментариев */
+    .comments-body {
+      padding: 14px;
+    }
+
+    .comment-input {
+      width: 100%;
+      height: 72px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text);
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-size: 11px;
+      line-height: 15.4px;
+      padding: 7px 9px;
+      resize: vertical;
+      outline: none;
+      display: block;
+    }
+
+    .comment-input:focus {
+      border-color: #454545;
+    }
+
+    .comment-btn {
+      margin-top: 8px;
+      background: #2a2a2a;
+      border: 1px solid #3a3a3a;
+      border-radius: 2px;
+      color: var(--text);
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-size: 11px;
+      line-height: 15.4px;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+
+    .comment-btn:hover {
+      background: #323232;
+      border-color: #484848;
+      color: #ffffff;
+    }
+
+    .comments-list {
+      margin-top: 10px;
+      color: var(--muted);
+    }
+
+    .comment-item {
+      border-top: 1px solid var(--border);
+      padding: 8px 0;
+      color: var(--text);
+    }
+
+    .comment-meta {
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .comment-meta strong {
+      color: #ffffff;
+    }
+
+    /* Футер */
+    .footer-panel {
+      padding: 9px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+    }
+
+    /* Уведомление */
+    .notice {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      background: #202020;
+      border: 1px solid var(--gs);
+      border-radius: 2px;
+      color: var(--text);
+      padding: 6px 11px;
+      display: none;
+      z-index: 999;
+    }
+
+    .notice.show {
+      display: block;
+    }
+
+    @media (max-width: 680px) {
+      .profile-body {
+        flex-direction: column-reverse;
+      }
+      .profile-avatar {
+        width: 108px;
+        height: 108px;
+      }
+      .info-table td.lbl {
+        width: 96px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-rainbow"></div>
+
+  <div class="container">
+    <!-- Шапка -->
+    <header class="panel">
+      <div class="header-top">
+        <div class="logo">krism<span>.tech</span></div>
+        <ul class="nav-list">
+          <li><a href="#">Index</a></li>
+          <li><a href="#">News</a></li>
+          <li><a href="#">Search</a></li>
+          <li><a href="#">Users</a></li>
+          <li><a href="#" class="active">Profile</a></li>
+          <li><button type="button" id="navCopyDiscord">Discord</button></li>
+        </ul>
+      </div>
+      <div class="header-sub">
+        <div class="user-welcome">
+          <div>Logged in as <strong>krism</strong> <span class="uid-muted">(UID 1337)</span></div>
+          <div>Member since 2026-10-23</div>
+        </div>
+        <div><a href="https://t.me/FREELADEQ" target="_blank" rel="noopener noreferrer">Latest news</a></div>
+      </div>
+    </header>
+
+    <!-- Профиль -->
+    <main class="panel">
+      <div class="panel-head">Profile: krism</div>
+      <div class="profile-body">
+        <div class="profile-left">
+          <table class="info-table">
+            <tr>
+              <td class="lbl">UID</td>
+              <td class="val">1337</td>
+            </tr>
+            <tr>
+              <td class="lbl">Title</td>
+              <td class="val">Member</td>
+            </tr>
+            <tr>
+              <td class="lbl">Registered</td>
+              <td class="val">2026-10-23 13:03:32</td>
+            </tr>
+            <tr>
+              <td class="lbl">Last seen</td>
+              <td class="val" id="lastSeenText">Today 00:00:00</td>
+            </tr>
+            <tr>
+              <td class="lbl">Status</td>
+              <td class="val"><span id="discordStatus" class="st-offline">Offline</span></td>
+            </tr>
+            <tr>
+              <td class="lbl">Playing</td>
+              <td class="val">
+                <span class="playing-wrap">
+                  <img id="gameIcon" class="playing-icon" alt="" />
+                  <span id="gameTitle" class="playing-muted">Loading...</span>
+                  <span id="gameExtra" class="playing-muted"></span>
+                  <span id="gameTimer" class="playing-timer"></span>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td class="lbl">Telegram</td>
+              <td class="val"><a href="https://t.me/FREELADEQ" target="_blank" rel="noopener noreferrer">@FREELADEQ</a></td>
+            </tr>
+            <tr>
+              <td class="lbl">Discord</td>
+              <td class="val">
+                <span>steam_corporation</span>
+                <button type="button" class="copy-trigger" id="copyDiscordBtn">[copy]</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="lbl">Steam</td>
+              <td class="val"><a href="https://steamcommunity.com/id/InvokerWithUmbrella/" target="_blank" rel="noopener noreferrer">InvokerWithUmbrella</a></td>
+            </tr>
+            <tr>
+              <td class="lbl">About</td>
+              <td class="val">krism.tech</td>
+            </tr>
+          </table>
+
+          <div class="posts-link">
+            <a href="https://steamcommunity.com/id/InvokerWithUmbrella/" target="_blank" rel="noopener noreferrer">Search for posts mentioning krism</a>
+          </div>
+        </div>
+
+        <!-- Правый квадратный аватар из Discord -->
+        <div class="profile-avatar" id="avatarContainer">
+          <span class="avatar-fallback">K</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Комментарии -->
+    <section class="panel">
+      <div class="panel-head" id="commentsHeader">Comments (0)</div>
+      <div class="comments-body">
+        <textarea class="comment-input" id="commentInput"></textarea>
+        <button type="button" class="comment-btn" id="leaveCommentBtn">Leave a comment</button>
+        <div class="comments-list" id="commentsList">No comments yet.</div>
+      </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="panel footer-panel">
+      <span>krism.tech</span>
+      <a href="#">Search</a>
+    </footer>
+  </div>
+
+  <div class="notice" id="noticeBox">Copied: <strong style="color: var(--gs);">steam_corporation</strong></div>
+
+  <script>
+    const CONFIG = {
+      discordId: '1238369905682940006',
+      discordUsername: 'steam_corporation'
+    };
+
+    function updateLastSeen() {
+      const now = new Date();
+      document.getElementById('lastSeenText').textContent = `Today ${now.toTimeString().slice(0, 8)}`;
+    }
+    updateLastSeen();
+    setInterval(updateLastSeen, 1000);
+
+    const noticeBox = document.getElementById('noticeBox');
+    let noticeTimer = null;
+
+    async function copyDiscord() {
+      try {
+        await navigator.clipboard.writeText(CONFIG.discordUsername);
+      } catch {
+        const tmp = document.createElement('input');
+        tmp.value = CONFIG.discordUsername;
+        document.body.appendChild(tmp);
+        tmp.select();
+        document.execCommand('copy');
+        document.body.removeChild(tmp);
+      }
+      noticeBox.classList.add('show');
+      clearTimeout(noticeTimer);
+      noticeTimer = setTimeout(() => noticeBox.classList.remove('show'), 1800);
+    }
+
+    document.getElementById('copyDiscordBtn').addEventListener('click', copyDiscord);
+    document.getElementById('navCopyDiscord').addEventListener('click', copyDiscord);
+
+    // Комментарии
+    const comments = [];
+    document.getElementById('leaveCommentBtn').addEventListener('click', () => {
+      const input = document.getElementById('commentInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const now = new Date();
+      comments.unshift({
+        author: 'Guest',
+        time: `Today ${now.toTimeString().slice(0, 8)}`,
+        text
+      });
+      input.value = '';
+
+      document.getElementById('commentsHeader').textContent = `Comments (${comments.length})`;
+      const listEl = document.getElementById('commentsList');
+      listEl.innerHTML = comments.map((c) => `
+        <div class="comment-item">
+          <div class="comment-meta"><strong>${c.author}</strong> &mdash; ${c.time}</div>
+          <div>${c.text.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+        </div>
+      `).join('');
+    });
+
+    function getGameArtUrl(activity) {
+      const img = activity?.assets?.large_image;
+      if (!img) return null;
+      if (img.startsWith('mp:')) return `https://media.discordapp.net/${img.slice(3)}`;
+      if (activity.application_id) return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${img}.png`;
+      return null;
+    }
+
+    // Таймер игры
+    let activeStart = null;
+    setInterval(() => {
+      const timerEl = document.getElementById('gameTimer');
+      if (!activeStart) {
+        timerEl.textContent = '';
+        return;
+      }
+      const total = Math.max(0, Math.floor((Date.now() - activeStart) / 1000));
+      const h = Math.floor(total / 3600);
+      const m = Math.floor((total % 3600) / 60);
+      const s = total % 60;
+      const pad = (n) => String(n).padStart(2, '0');
+      timerEl.textContent = h > 0
+        ? `[${pad(h)}:${pad(m)}:${pad(s)}]`
+        : `[${pad(m)}:${pad(s)}]`;
+    }, 1000);
+
+    let lastAvatarHash = null;
+
+    function renderPresence(data) {
+      if (!data) return;
+
+      const status = data.discord_status || 'offline';
+      const labels = {
+        online: 'Online',
+        idle: 'Idle',
+        dnd: 'Do Not Disturb',
+        offline: 'Offline'
+      };
+
+      const statusEl = document.getElementById('discordStatus');
+      statusEl.textContent = labels[status] || 'Offline';
+      statusEl.className = `st-${status}`;
+
+      // Аватар из Discord
+      const user = data.discord_user;
+      if (user?.id) {
+        const hash = user.avatar || 'default';
+        if (hash !== lastAvatarHash) {
+          lastAvatarHash = hash;
+          const avatarBox = document.getElementById('avatarContainer');
+          if (user.avatar) {
+            const ext = user.avatar.startsWith('a_') ? 'gif' : 'png';
+            const url = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${ext}?size=256`;
+            avatarBox.innerHTML = `<img src="${url}" alt="krism" onerror="this.parentElement.innerHTML='<span class=\\'avatar-fallback\\'>K</span>'">`;
+          } else {
+            const idx = Number((BigInt(user.id) >> 22n) % 6n);
+            avatarBox.innerHTML = `<img src="https://cdn.discordapp.com/embed/avatars/${idx}.png" alt="krism">`;
+          }
+        }
+      }
+
+      // Игра / Spotify в одну чистую строку
+      const activities = Array.isArray(data.activities) ? data.activities : [];
+      const game = activities.find((a) => a.type === 0 || a.type === 1 || a.type === 5);
+
+      const iconEl = document.getElementById('gameIcon');
+      const titleEl = document.getElementById('gameTitle');
+      const extraEl = document.getElementById('gameExtra');
+
+      if (game) {
+        titleEl.textContent = game.name;
+        titleEl.className = 'playing-active';
+
+        const parts = [game.details, game.state].filter(Boolean);
+        extraEl.textContent = parts.length ? `- ${parts.join(', ')}` : '';
+        activeStart = game.timestamps?.start || null;
+
+        const artUrl = getGameArtUrl(game);
+        if (artUrl) {
+          iconEl.src = artUrl;
+          iconEl.style.display = 'inline-block';
+          iconEl.onerror = () => { iconEl.style.display = 'none'; };
+        } else {
+          iconEl.style.display = 'none';
+        }
+      } else if (data.listening_to_spotify && data.spotify) {
+        titleEl.textContent = `${data.spotify.song} - ${data.spotify.artist}`;
+        titleEl.className = 'playing-active';
+        extraEl.textContent = '(Spotify)';
+        activeStart = null;
+
+        if (data.spotify.album_art_url) {
+          iconEl.src = data.spotify.album_art_url;
+          iconEl.style.display = 'inline-block';
+        } else {
+          iconEl.style.display = 'none';
+        }
+      } else {
+        titleEl.textContent = 'Not in a game';
+        titleEl.className = 'playing-muted';
+        extraEl.textContent = '';
+        activeStart = null;
+        iconEl.style.display = 'none';
+      }
+    }
+
+    async function initLanyard() {
+      const titleEl = document.getElementById('gameTitle');
+
+      const fetchStatus = async () => {
+        try {
+          const res = await fetch(`https://api.lanyard.rest/v1/users/${CONFIG.discordId}`);
+          const json = await res.json();
+          if (json.success) {
+            renderPresence(json.data);
+          } else {
+            titleEl.textContent = 'Not synced (join discord.gg/lanyard)';
+            titleEl.className = 'playing-muted';
+          }
+        } catch {
+          titleEl.textContent = 'Unavailable';
+          titleEl.className = 'playing-muted';
+        }
+      };
+
+      await fetchStatus();
+      setInterval(fetchStatus, 10000);
+    }
+
+    initLanyard();
+  </script>
+</body>
+</html>
